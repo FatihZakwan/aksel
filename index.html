@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Greenhouse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg-color-main: #12221D;
+            --bg-color-team: #1A3A31;
+            --bg-color-footer: #0B1713;
+            --primary-color: #279C6F;
+            --card-color: #FFFFFF;
+            --text-color-light: #FFFFFF;
+            --text-color-dark: #000000;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color-main);
+            color: var(--text-color-light);
+            margin: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 4rem;
+            background-color: rgba(18, 34, 29, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            margin-right: 0.75rem;
+            fill: var(--primary-color);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color-light);
+            font-weight: 500;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a.active {
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .content-wrapper {
+            padding: 4rem;
+        }
+
+        section {
+            text-align: center;
+        }
+
+        #home {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            margin: 0 0 2rem 0;
+            max-width: 500px;
+        }
+
+        .hero-text .cta-button {
+            display: inline-block;
+            background-color: var(--card-color);
+            color: var(--text-color-dark);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .hero-text .cta-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .hero-image img {
+            max-width: 450px;
+            border-radius: 16px;
+        }
+
+        #about {
+           padding-top: 6rem;
+        }
+        #about h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        #about > p {
+            max-width: 600px;
+            margin: 0 auto 4rem auto;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            align-items: center;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .feature-column {
+            display: flex;
+            flex-direction: column;
+            gap: 5rem;
+        }
+        
+        .feature-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-icon svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--text-color-light);
+        }
+        
+        .central-icon svg {
+            width: 64px;
+            height: 64px;
+        }
+
+        #team {
+            background-color: var(--bg-color-team);
+            padding-top: 4rem;
+            padding-bottom: 6rem;
+        }
+        #team h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        #team > p {
+            margin-bottom: 3rem;
+            color: #ccc;
+        }
+        .team-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .team-card {
+            background-color: var(--card-color);
+            color: var(--text-color-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 220px;
+            box-sizing: border-box;
+        }
+        .team-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        .team-card h3 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.2rem;
+        }
+        .team-card p {
+            margin: 0;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background-color: var(--bg-color-footer);
+            padding: 3rem 4rem;
+            text-align: center;
+        }
+        footer .tagline {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+        }
+        footer .description {
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+            color: #ccc;
+        }
+        footer .copyright {
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="content-wrapper">
+            <header class="navbar">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.31 8.84c-1.34.07-2.63.4-3.83.95-.54.25-1.07.54-1.58.88-.28.18-.55.38-.82.59-.53.42-1.03.88-1.51 1.36-1.54 1.54-2.47 3.6-2.56 5.72H21c0-4.42-3.58-8-8-8-1.29 0-2.52.31-3.61.87"/></svg>
+                    <span>Smart Greenhouse</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link active">HOME</a></li>
+                    <li><a href="dashboard.html" class="nav-link">DASHBOARD</a></li>
+                    <li><a href="#team" class="nav-link">OUR TEAM</a></li>
+                </ul>
+            </header>
+
+            <section id="home">
+                <div class="hero-text">
+                    <h1>Control Your Green House from Anywhere</h1>
+                    <p>Pantau dan kendalikan alat-alat green house anda secara otomatis dan real-time dengan sistem IoT kami.</p>
+                    <a href="dashboard.html" class="cta-button">Go to Dashboard ></a>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1593322134333-8a388533b3e4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="Greenhouse">
+                </div>
+            </section>
+
+            <section id="about">
+                 <h2>What is Smart Greenhouse?</h2>
+                 <p>Smart Greenhouse adalah rumah kaca modern yang dilengkapi teknologi IoT untuk memantau dan mengatur kondisi tanaman secara otomatis.</p>
+                 <div class="features-grid">
+                    <div class="feature-column">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        </div>
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        </div>
+                    </div>
+                    <div class="feature-column central-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                    </div>
+                    <div class="feature-column">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        </div>
+                         <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        </div>
+                    </div>
+                 </div>
+                 <p>Dengan sensor suhu, kelembapan udara & tanah, serta cahaya matahari, sistem ini dapat menyiram tanaman otomatis dan menampilkan data real-time melalui internet.</p>
+            </section>
+        </div>
+        
+        <section id="team">
+            <h2>Meet Our Team!</h2>
+            <p>Meet the Minds Behind the System.</p>
+            <div class="team-container">
+                <div class="team-card">
+                    <img src="https://placehold.co/120x120/EFEFEF/333333?text=AF" alt="Team Member">
+                    <h3>Akhtar Fahru Fadhillah</h3>
+                    <p>Back-end & IoT Programmer</p>
+                </div>
+                <div class="team-card">
+                    <img src="https://placehold.co/120x120/EFEFEF/333333?text=MF" alt="Team Member">
+                    <h3>Muhammad Fitra</h3>
+                    <p>UI/UX & Case Designer</p>
+                </div>
+                <div class="team-card">
+                    <img src="https://placehold.co/120x120/EFEFEF/333333?text=MFZ" alt="Team Member">
+                    <h3>Muhammad Fatih Zakwan</h3>
+                    <p>Front-end & IoT Programmer</p>
+                </div>
+                 <div class="team-card">
+                    <img src="https://placehold.co/120x120/EFEFEF/333333?text=KRP" alt="Team Member">
+                    <h3>Kenan Rahes Purnomo</h3>
+                    <p>Front-end Programmer & Chief</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p class="tagline">Automated, Connected, Efficient.</p>
+            <p class="description">Kami hadir untuk membantu kamu mengelola greenhouse secara otomatis, efisien, dan terkoneksi, agar tanaman tumbuh maksimal tanpa repot.</p>
+            <p class="copyright">&copy; 2025 Smart Greenhouse. All rights reserved.</p>
+        </footer>
+    </main>
+</body>
+</html>

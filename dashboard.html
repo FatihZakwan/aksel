@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Greenhouse Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg-color-dark: #12221D;
+            --primary-color: #279C6F;
+            --card-color: #FFFFFF;
+            --text-color-light: #FFFFFF;
+            --text-color-dark: #000000;
+            --font-family: 'Poppins', sans-serif;
+            --color-connected: #27AE60;
+            --color-disconnected: #E74C3C;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-light);
+            margin: 0;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            margin-right: 0.75rem;
+            fill: var(--primary-color);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color-light);
+            font-weight: 500;
+            padding-bottom: 5px;
+        }
+        
+        .nav-links a.active {
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: 700;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .panel {
+            background: rgba(39, 156, 111, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        
+        .panel-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            text-align: left;
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background-color: var(--card-color);
+            color: var(--text-color-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .overview-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .overview-card .icon { font-size: 1.8rem; }
+        .overview-card .info p { margin: 0; font-size: 0.9rem; color: #555; }
+        .overview-card .info h3 { margin: 0; font-size: 1.2rem; font-weight: 600; }
+        .overview-card .info .status-active { color: var(--color-connected); }
+
+        .sensor-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .sensor-card .icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+        .sensor-card .details {
+            display: flex;
+            flex-direction: column;
+        }
+        .sensor-card h3 { margin: 0 0 0.25rem 0; font-size: 1rem; color: #555; font-weight: 500; }
+        .sensor-card .value { font-size: 2.5rem; font-weight: 600; margin: 0; }
+
+        .automation-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .control-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-card .text h3 { margin: 0 0 0.25rem 0; font-size: 1.2rem; font-weight: 600; }
+        .control-card .text p { margin: 0; font-size: 1rem; color: #555; }
+        
+        .switch { position: relative; display: inline-block; width: 80px; height: 40px; }
+        .switch input { display: none; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 40px; }
+        .slider:before { position: absolute; content: ""; height: 32px; width: 32px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(40px); }
+        
+        .manual-control { background-color: #E0E0E0; display: flex; align-items: center; justify-content: flex-start; padding-left: 1.5rem; gap: 1rem; }
+        .manual-control button { background-color: transparent; border: none; color: #BDBDBD; font-family: var(--font-family); font-size: 2rem; font-weight: 600; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.31 8.84c-1.34.07-2.63.4-3.83.95-.54.25-1.07.54-1.58.88-.28.18-.55.38-.82.59-.53.42-1.03.88-1.51 1.36-1.54 1.54-2.47 3.6-2.56 5.72H21c0-4.42-3.58-8-8-8-1.29 0-2.52.31-3.61.87"/></svg>
+            <span>Smart Greenhouse</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">HOME</a></li>
+            <li><a href="#" class="active">DASHBOARD</a></li>
+            <li><a href="#">OUR TEAM</a></li>
+        </ul>
+    </header>
+
+    <main class="dashboard">
+        <section class="panel">
+            <h2 class="panel-title">Overview Panel</h2>
+            <div class="card-container">
+                <div class="card overview-card">
+                    <div class="icon">✔️</div>
+                    <div class="info">
+                        <p>Green House Status</p>
+                        <h3 class="status-active">Active</h3>
+                    </div>
+                </div>
+                <div class="card overview-card">
+                    <div class="icon">🕒</div>
+                    <div class="info">
+                        <p>Time</p>
+                        <h3 id="time-display">--:--</h3>
+                    </div>
+                </div>
+                <div class="card overview-card">
+                    <div class="icon">📅</div>
+                    <div class="info">
+                        <p>Date</p>
+                        <h3 id="date-display">--/--/----</h3>
+                    </div>
+                </div>
+                <div class="card overview-card">
+                    <div class="icon">📶</div>
+                    <div class="info">
+                        <p>Connection Status</p>
+                        <h3 id="connection-status">Connecting...</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2 class="panel-title">Sensor Monitoring</h2>
+            <div class="card-container">
+                <div class="card sensor-card">
+                    <div class="icon">🌡️</div>
+                    <div class="details">
+                        <h3>Air temperature</h3>
+                        <p class="value" id="temp-value">-- &deg;C</p>
+                    </div>
+                </div>
+                <div class="card sensor-card">
+                    <div class="icon">💧</div>
+                    <div class="details">
+                        <h3>Air Humidity</h3>
+                        <p class="value" id="hum-value">-- %</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2 class="panel-title">Automation Control</h2>
+            <div class="automation-container">
+                 <div class="card control-card">
+                    <div class="text">
+                        <h3>Auto Mode</h3>
+                        <p>ON</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked disabled>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="card manual-control">
+                     <label class="switch">
+                        <input type="checkbox" disabled>
+                        <span class="slider"></span>
+                    </label>
+                    <button disabled>Run Now</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+  <script>
+    // =======================================================================
+    // --- DATA THINGSPEAK ANDA ---
+    // =======================================================================
+    const channelID = "3040742";
+    const readApiKey = "YO6R4VABWMKAHYDF";
+    // =======================================================================
+
+    const tempElement = document.getElementById("temp-value");
+    const humElement = document.getElementById("hum-value");
+    const timeElement = document.getElementById("time-display");
+    const dateElement = document.getElementById("date-display");
+    const connectionElement = document.getElementById("connection-status");
+
+    function setDisconnected() {
+        connectionElement.innerText = "Disconnected";
+        connectionElement.style.color = "var(--color-disconnected)";
+    }
+
+    function fetchData() {
+      const url = `https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${readApiKey}&results=1`;
+
+      fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+          if (data.feeds && data.feeds.length > 0) {
+            const lastEntry = data.feeds[0];
+            const temp = parseFloat(lastEntry.field1).toFixed(2);
+            const hum = parseFloat(lastEntry.field2).toFixed(2);
+            
+            const timestamp = new Date(lastEntry.created_at);
+            const now = new Date();
+            const ageInMinutes = (now - timestamp) / 1000 / 60;
+
+            // Cek apakah data masih baru (kurang dari 2 menit)
+            if (ageInMinutes < 2) {
+                connectionElement.innerText = "Connected";
+                connectionElement.style.color = "var(--color-connected)";
+                tempElement.innerHTML = `${temp} &deg;C`;
+                humElement.innerText = `${hum} %`;
+            } else {
+                // Jika data sudah lama, anggap disconnected
+                setDisconnected();
+            }
+          } else {
+            // Jika tidak ada data sama sekali
+            setDisconnected();
+          }
+        })
+        .catch(error => {
+          console.error("Gagal mengambil data:", error);
+          setDisconnected();
+        });
+    }
+
+    function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const year = now.getFullYear();
+
+        timeElement.innerText = `${hours}:${minutes}`;
+        dateElement.innerText = `${day}/${month}/${year}`;
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    fetchData();
+    updateTime();
+
+    // Atur interval pembaruan
+    setInterval(fetchData, 15000); // Ambil data sensor setiap 15 detik
+    setInterval(updateTime, 1000); // Update jam setiap detik
+  </script>
+</body>
+</html>
